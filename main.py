@@ -57,24 +57,30 @@ class ZahlenratenGUI(ctk.CTk):
 
 
     def ckeck(self):
-        self.guess = int(self.entry.get())
-        self.returned = self.zahlenraten.raten(self.guess)
-        
-        if self.guess > self.zahlenraten.max:
-            self.result_label.configure(text="Gib eine Zahl von 1 bis 100 ein")
-        
+    
+        try:
+            self.guess = int(self.entry.get())
+            self.returned = self.zahlenraten.raten(self.guess)
         
         
-        elif self.returned == -1:
-            self.result_label.configure(text="Deine Zahl ist zu klein!")
         
-        elif self.returned == 1:
-            self.result_label.configure(text="Deine Zahl ist zu groß!")
+            if self.guess > self.zahlenraten.max:
+                self.result_label.configure(text="Gib eine Zahl von 1 bis 100 ein")
+            
+            
+            
+            elif self.returned == -1:
+                self.result_label.configure(text="Deine Zahl ist zu klein!")
+            
+            elif self.returned == 1:
+                self.result_label.configure(text="Deine Zahl ist zu groß!")
+            
+            else:
+                self.result_label.configure(text="Korrekt, du hast richtig geraten!")
+                self.ask_player_new_game()
         
-        else:
-            self.result_label.configure(text="Korrekt, du hast richtig geraten!")
-            self.ask_player_new_game()
-        
+        except(ValueError):
+            self.result_label.configure(text="Gib eine gültige Zahl ein!")
         
 
     def ask_player_new_game(self):

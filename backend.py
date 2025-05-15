@@ -1,7 +1,7 @@
 import random as r
 
 class Zahlenraten:
-    def __init__(self, min: int = 1, max: int = 10):
+    def __init__(self, min: int = 1, max: int = 100):
         self.min = min
         self.max = max
         self.versuche = 0
@@ -21,7 +21,5 @@ class Zahlenraten:
         
         
 
-Zahlenraten = Zahlenraten()
-while True:
-    print(Zahlenraten.raten(int(input("Number input:"))))
+
     

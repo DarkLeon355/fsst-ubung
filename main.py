@@ -8,7 +8,7 @@ FSST 4BHEL
 import customtkinter as ctk
 from tkinter import Menu
 import CTkMessagebox
-
+from backend import Zahlenraten
 
 
 ctk.set_appearance_mode("Light")
@@ -22,11 +22,15 @@ class ZahlenratenGUI(ctk.CTk):
         self.title("Zahlenraten")
         self.geometry("500x230")
         
+        self.zahlenraten = Zahlenraten()
+        
+        
+        
         menu_bar = Menu(self)
         
         game_menu = Menu(menu_bar, tearoff=0)
         
-        game_menu.add_command(label="Neues Spiel")
+        game_menu.add_command(label="Neues Spiel", command=self.reset_game)
         game_menu.add_command(label="Beenden", command=self.quit)
         
         menu_bar.add_cascade(label="Spiel", menu=game_menu)
@@ -48,9 +52,30 @@ class ZahlenratenGUI(ctk.CTk):
         self.result_label = ctk.CTkLabel(self, text="")
         self.result_label.grid(row=3, column=0, columnspan=2, pady=5)
 
-        self.button = ctk.CTkButton(self, text="Raten")
+        self.button = ctk.CTkButton(self, text="Raten", command=self.ckeck)
         self.button.grid(row=4, column=0, columnspan=2, pady=10, padx=10, sticky="nsew")
 
+
+    def ckeck(self):
+        self.guess = int(self.entry.get())
+        self.returned = self.zahlenraten.raten(self.guess)
+        
+        if self.guess > self.zahlenraten.max:
+            self.result_label.configure(text="Gib eine Zahl von 1 bis 100 ein")
+        
+        
+        
+        elif self.returned == -1:
+            self.result_label.configure(text="Deine Zahl ist zu klein!")
+        
+        elif self.returned == 1:
+            self.result_label.configure(text="Deine Zahl ist zu groß!")
+        
+        else:
+            self.result_label.configure(text="Korrekt, du hast richtig geraten!")
+            self.ask_player_new_game()
+        
+        
 
     def ask_player_new_game(self):
         self.msg = CTkMessagebox.CTkMessagebox(title="Info", message="Nochmal spielen?", corner_radius=3,
@@ -63,7 +88,11 @@ class ZahlenratenGUI(ctk.CTk):
         elif self.response == "Nein":
             self.quit()
         
-
+    
+    def reset_game(self):
+        self.result_label.configure(text="")
+        self.zahlenraten.random_number()
+        
 
 
 if __name__ == "__main__":
